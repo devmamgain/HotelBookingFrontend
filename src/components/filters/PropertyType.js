@@ -1,14 +1,16 @@
-import { useState } from "react"
+import React from "react";
 
-const PropertyType=({property})=>{
-    const [color,setColor] = useState(false)
-    const colortogray = ()=>{
-     setColor(true)
-    }
-     return(
-     <div className={`border-2 border-black w-32 h-32 text-center hover:cursor-pointer ${color ? "bg-gray-300" : ""} hover:bg-gray-300 rounded-lg`} onClick={colortogray}>
+const PropertyType = ({ property, selected, onSelect }) => {
+  return (
+    <div
+      className={`border-2 border-black px-2 text-center hover:cursor-pointer ${
+        selected ? "bg-gray-300" : ""
+      } hover:bg-gray-300 rounded-lg`}
+      onClick={onSelect}
+    >
       {property}
-     </div>
-     )
-}
-export default PropertyType
+    </div>
+  );
+};
+
+export default PropertyType;

@@ -4,10 +4,11 @@ import { useEffect, useState } from "react"
 const OrderUser = ()=>{
     const [orderlist,setOrderList]= useState([])
     const token = localStorage.getItem("jwtToken")
+    const apimainurl = process.env.REACT_APP_BACKEND_URL;
 
     useEffect(()=>{
     const callingdata = async()=>{
-         const response = await axios.get("http://localhost:7000/api/order/getorder",{
+         const response = await axios.get(apimainurl+"/order/getorder",{
             headers: {
               Authorization: 'Bearer ' + token
           }
@@ -20,27 +21,40 @@ const OrderUser = ()=>{
     callingdata()
     }
     },[token])
+    console.log(orderlist)
     return(
-        <div>
+      <div className="flex flex-col items-center mb-5">
          {token ? orderlist.length>0 ? orderlist.map(data=>
-             <div className=" w-72 mt-14 grid gap-2 border rounded-lg group drop-shadow-2xl shadow-lg hover:scale-125 cursor-pointer transition duration-700" >
-    <h1 className="">{data._id}</h1>
-    <img src={data.hotelDetails.image} alt="no image found" className="w-72 h-72 rounded-lg relative "/>
-  <div className="mr-2 ml-2 grid">
-    <div  className="font-bold flex">{data.hotelDetails.name}
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-auto ">
-  <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
-</svg>
-  {data.hotelDetails.rating}
+              <div className=" w-[60%] mt-14 border rounded-lg group drop-shadow-2xl shadow-lg flex flex-wrap" >
+              <img src={data.hotelDetails.image} alt="no image found" className=" w-60 h-60 rounded-lg relative "/>
+              <div className=" flex-grow mt-3 flex flex-col">
+                <div className="mr-2 ml-2">
+              <div  className="font-bold flex">
+                <h1>
+                {data.hotelDetails.name}
+                </h1>
+                <div className="flex ml-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-auto ">
+            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clip-rule="evenodd" />
+          </svg>
+            {data.hotelDetails.rating}
+            </div>
+              </div>
+              <div>
+              {data.hotelDetails.address},{data.hotelDetails.city},{data.hotelDetails.state}
+              </div>
+              <div className="font-bold ml-1">
+               Rs. {data.hotelDetails.price}
+              </div>
+              <div>
+               <h1>Total Price Paid : </h1>
+               <h1 className="ml-1 font-bold">Rs. {data.totalamount}</h1>
+                </div>
+              </div>
+              <div className="flex justify-center gap-2 mt-auto items-center p-5 text-lg font-semibold bg-orange-500 text-white"> Booked for {data.Days == "Today" ? data.Days : <h1>{data.Days} Day</h1>} </div>
+
     </div>
-    <div>
-    {data.hotelDetails.address},{data.hotelDetails.city},{data.hotelDetails.state}
-    </div>
-    <div className="font-bold ml-1">
-     Rs. {data.hotelDetails.price}
-    </div>
-    <div> <h1>Booked for {data.Days}</h1> </div>
-    </div>
+    
   </div>) : 
   <div className="flex flex-grow min-h-screen items-center justify-center">
   <h1 className="font-bold text-3xl ">

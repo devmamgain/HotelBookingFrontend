@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useFiltersContext } from './FiltersContext';
 
 const PriceRange = () => {
-  const [sliderValue, setSliderValue] = useState(1000);
+  const {filtersprice} = useFiltersContext()
+  const [sliderValue, setSliderValue] = useState(filtersprice);
+  
   const {setConfirmprice} = useFiltersContext()
   // const {applybutton,setApplybutton} = useFiltersContext()
 
@@ -17,20 +19,31 @@ const PriceRange = () => {
   //  }
   
 
-  const minRange = 1000;
+  const minRange = 0;
   const maxRange = 50000;
-  const interval = 3500;
+  const interval = 5000;
 
   const rangeValues = [];
   for (let i = minRange; i <= maxRange; i += interval) {
     rangeValues.push(i);
   }
+let aboveprice = rangeValues.filter((data, index) => index % 2 !== 0)
+let belowprice = rangeValues.filter((data, index) => index % 2 === 0)
 
   return (
-    <div>
-      Price:
+    <div className='w-96'>
+    
       <div className="relative mb-6">
-        <label htmlFor="labels-range-input" className="sr-only">
+        
+      
+        <div className="flex text-[10px] text-gray-500 dark:text-gray-400 justify-between ml-8 mr-10">
+         
+        
+ {aboveprice.map((value, index) => (
+  <span key={index}>{value}</span>
+))}
+       </div>
+       <label htmlFor="labels-range-input" className="sr-only">
           Labels range
         </label>
         <input
@@ -43,12 +56,10 @@ const PriceRange = () => {
           onChange={handleSliderChange}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
         />
-        <div className="flex justify-between mt-2 text-sm text-gray-500 dark:text-gray-400">
-         
-          {rangeValues.map((value, index) => (
+       <div className="flex justify-between text-[10px] text-gray-500 dark:text-gray-400 ml-1">
+       {belowprice.map((value, index) => (
             <span key={index}>{value}</span>
           ))}
-        
         </div>
       </div>
     </div>
